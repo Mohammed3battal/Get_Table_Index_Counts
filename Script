@@ -1,0 +1,10 @@
+SELECT 
+    DB_NAME() AS DatabaseName,
+    t.name AS TableName,
+    COUNT(i.index_id) AS TotalIndexes
+FROM sys.tables t
+INNER JOIN sys.indexes i ON t.object_id = i.object_id
+WHERE i.type IN (0, 1, 2)  -- Heap, Clustered, Non-clustered
+  AND t.is_ms_shipped = 0
+GROUP BY t.name
+ORDER BY TotalIndexes DESC;
